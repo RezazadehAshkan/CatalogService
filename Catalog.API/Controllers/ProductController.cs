@@ -1,4 +1,5 @@
 using Catalog.Application.Commands;
+using Catalog.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,9 +14,21 @@ public class ProductController(IMediator mediator) : ControllerBase
     {
         var id = await mediator.Send(command);
         return CreatedAtAction(nameof(Create), new { id }, new 
-    { 
+        { 
         Id = id, 
         Message = "Product created successfully"
-    });
+        });
     }
+
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var product = await mediator.Send(new GetProductByIdQuery(id));
+        if (product == null)
+        {
+            return NotFound(new { Message = "Product not found" });
+        }
+        return Ok(product);
+    }   
 }

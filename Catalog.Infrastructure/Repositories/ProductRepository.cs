@@ -4,8 +4,11 @@ using Catalog.Infrastructure.Persistence;
 
 namespace Catalog.Infrastructure.Repositories;
 
-public class ProductRepository(CatalogDbContext db) : IProductRepository
+public class ProductRepository : BaseRepository, IProductRepository
 {
-    public async Task AddAsync(Product product) => await db.Products.AddAsync(product);
-    public async Task SaveChangesAsync() => await db.SaveChangesAsync();
+    public ProductRepository(CatalogDbContext db) : base(db) { }
+
+    public async Task AddAsync(Product product) => await _db.Products.AddAsync(product);
+
+    public async Task<Product?> GetByIdAsync(Guid id) => await _db.Products.FindAsync(id);
 }

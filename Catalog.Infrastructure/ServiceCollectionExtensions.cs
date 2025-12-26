@@ -16,11 +16,11 @@ public static class ServiceCollectionExtensions
     public int MaxRetryCount { get; set; } = 3;
 }
     public static IServiceCollection AddInfrastructureServices(
-        this IServiceCollection services, IConfiguration config)
+        this IServiceCollection services, string connectionString)
     {
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddDbContext<CatalogDbContext>(opts => 
-            opts.UseNpgsql(config.GetConnectionString("DefaultConnection")));
+            opts.UseNpgsql(connectionString));
         return services;
     }
 }

@@ -17,7 +17,7 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(CreateProductCommand).Assembly));
 
 // B. Infrastructure Layer (DB & Repositories)
-builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddInfrastructureServices(builder.Configuration.GetConnectionString("DefaultConnection"));
 /*
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddDbContext<CatalogDbContext>(opts => 
