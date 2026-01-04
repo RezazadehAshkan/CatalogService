@@ -2,10 +2,10 @@ using MediatR;
 using Catalog.Domain;
 using Catalog.Application.Interfaces;
 
-namespace Catalog.Application.Commands;
+namespace Catalog.Application.Commands.CreateProduct;
 
 // 1. The Command (DTO)
-public record CreateProductCommand(string Name, decimal Price, string Sku) : IRequest<Guid>;
+public sealed record CreateProductCommand(string Name, decimal Price, string Sku) : IRequest<Guid>;
 
 // 2. The Handler (Business Logic)
 public class CreateProductHandler(IProductRepository repository) 

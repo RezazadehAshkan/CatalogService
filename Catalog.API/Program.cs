@@ -1,4 +1,4 @@
-using Catalog.Application.Commands;
+using Catalog.Application.Commands.CreateProduct;
 using Catalog.Application.Interfaces;
 using Catalog.Infrastructure.Persistence;
 using Catalog.Infrastructure.Repositories;
@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Scalar.AspNetCore;
-using Catalog.Infrastructure; 
+using Catalog.Infrastructure;
+using Catalog.Application;
+using Catalog.API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 // A. Application Layer (MediatR)
 builder.Services.AddMediatR(cfg => 
     cfg.RegisterServicesFromAssembly(typeof(CreateProductCommand).Assembly));
+    builder.Services.AddApplicationServices();
 
 // B. Infrastructure Layer (DB & Repositories)
 builder.Services.AddInfrastructureServices(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -42,6 +45,9 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 
 // --- 2. MIDDLEWARE ---
+
+// Convert FluentValidation exceptions into JSON 400 responses
+app.UseMiddleware<ValidationExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

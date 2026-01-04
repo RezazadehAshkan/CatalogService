@@ -1,4 +1,4 @@
-using Catalog.Application.Commands;
+using Catalog.Application.Commands.CreateProduct;
 using Catalog.Application.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
